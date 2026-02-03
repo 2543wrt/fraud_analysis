@@ -1,0 +1,16 @@
+# Python cache
+__pycache__/
+*.py[cod]
+
+# Virtual environments
+venv/
+env/
+
+# Generated output folders
+generated_data/
+generated_images/
+
+# Individual generated files (if any exist in root)
+*.csv
+*.png
+*.jpg
