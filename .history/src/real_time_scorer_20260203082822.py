@@ -21,9 +21,9 @@ class RealTimeScorer:
             if account_risk > 0.7:
                 risk_factors.append(f"Source account has high risk score: {account_risk:.2f}")
         
-        if 24000 <= amount <= 24999:
+        if 9000 <= amount <= 9999:
             risk_score += 0.3
-            risk_factors.append("Amount just below R25k threshold (potential structuring)")
+            risk_factors.append("Amount just below $10k threshold (potential structuring)")
         
         if from_account in self.graph.G and to_account in self.graph.G:
             if self.graph.G.has_edge(to_account, from_account):

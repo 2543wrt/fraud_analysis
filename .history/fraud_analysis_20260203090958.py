@@ -4,6 +4,7 @@ matplotlib.use('Agg')  # Non-interactive backend
 import matplotlib.pyplot as plt
 import seaborn as sns
 import warnings
+import logging
 import os
 
 from data_generator import TransactionGenerator
@@ -20,10 +21,13 @@ warnings.filterwarnings('ignore')
 plt.style.use('seaborn-v0_8-darkgrid')
 sns.set_palette("husl")
 
-print("=" * 80)
-print("MONEY LAUNDERING DETECTION SYSTEM")
-print("=" * 80)
-print("\n✓ All libraries imported successfully\n")
+# Configure logging
+logging.basicConfig(
+    level=logging.INFO,
+    format='%(asctime)s - %(name)s - %(levelname)s - %(message)s',
+    handlers=[logging.FileHandler("system.log"), logging.StreamHandler()]
+)
+logger = logging.getLogger(__name__)
 
 def main():
     """Main execution function"""
@@ -71,7 +75,7 @@ def main():
         )
         
         print(f"\nTest Case {i}: {tx['label'].upper()}")
-        print(f"Transaction: {tx['from_account']} → {tx['to_account']} (R{tx['amount']:,.2f})")
+        print(f"Transaction: {tx['from_account']} → {tx['to_account']} (${tx['amount']:.2f})")
         print(f"Risk Score: {result['risk_score']:.3f}")
         print(f"Action: {result['action']}")
         if result['risk_factors']:

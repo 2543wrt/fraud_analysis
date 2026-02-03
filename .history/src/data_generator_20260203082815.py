@@ -29,7 +29,7 @@ class TransactionGenerator:
                 'timestamp': base_time + timedelta(minutes=np.random.randint(0, 43200)),
                 'from_account': np.random.choice(self.accounts),
                 'to_account': np.random.choice(self.merchants),
-                'amount': np.random.lognormal(mean=6.5, sigma=1.5),  # Adjusted for ZAR scale
+                'amount': np.random.lognormal(mean=4, sigma=1.5),
                 'device_id': np.random.choice(self.devices),
                 'ip_address': np.random.choice(self.ips),
                 'label': 'legitimate'
@@ -47,7 +47,7 @@ class TransactionGenerator:
         for pattern in range(n_patterns):
             circle_size = np.random.randint(3, 8)
             circle_accounts = np.random.choice(self.accounts, circle_size, replace=False)
-            amount = np.random.uniform(100000, 500000)  # Larger ZAR amounts for layering
+            amount = np.random.uniform(5000, 50000)
             start_time = base_time + timedelta(hours=np.random.randint(0, 720))
             
             for i in range(circle_size):
@@ -93,7 +93,7 @@ class TransactionGenerator:
                     'timestamp': start_time + timedelta(minutes=i*5),
                     'from_account': source,
                     'to_account': mule,
-                    'amount': np.random.uniform(15000, 24000),  # ZAR mule amounts
+                    'amount': np.random.uniform(8000, 9999),
                     'device_id': network_device,
                     'ip_address': network_ip,
                     'label': 'mule_network'
@@ -109,7 +109,7 @@ class TransactionGenerator:
                     'timestamp': start_time + timedelta(hours=np.random.randint(12, 48)),
                     'from_account': mule,
                     'to_account': dest,
-                    'amount': np.random.uniform(14000, 23000),
+                    'amount': np.random.uniform(7500, 9500),
                     'device_id': network_device,
                     'ip_address': network_ip,
                     'label': 'mule_network'
@@ -136,7 +136,7 @@ class TransactionGenerator:
                     'timestamp': start_time + timedelta(hours=i),
                     'from_account': source,
                     'to_account': np.random.choice(self.accounts),
-                    'amount': np.random.uniform(24000, 24999),  # Just below R25k threshold
+                    'amount': np.random.uniform(9000, 9999),
                     'device_id': np.random.choice(self.devices),
                     'ip_address': np.random.choice(self.ips),
                     'label': 'structuring'

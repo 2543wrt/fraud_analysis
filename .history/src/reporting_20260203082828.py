@@ -21,7 +21,7 @@ def generate_report(df_transactions, df_results, cycles, suspicious_groups, scor
                                                          'total_amount_out', 'n_outgoing_txs']]
     for idx, row in top_risks.iterrows():
         print(f"  {row['account']}: Score={row['risk_score']:.3f} ({row['risk_category']}), "
-              f"Amount=R{row['total_amount_out']:,.0f}, Txs={int(row['n_outgoing_txs'])}")
+              f"Amount=${row['total_amount_out']:,.0f}, Txs={int(row['n_outgoing_txs'])}")
     
     print(f"\nPattern Detection Results:")
     print(f"  Circular Flows Detected: {len(cycles)}")

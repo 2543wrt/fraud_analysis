@@ -71,7 +71,7 @@ def main():
         )
         
         print(f"\nTest Case {i}: {tx['label'].upper()}")
-        print(f"Transaction: {tx['from_account']} → {tx['to_account']} (R{tx['amount']:,.2f})")
+        print(f"Transaction: {tx['from_account']} → {tx['to_account']} (${tx['amount']:.2f})")
         print(f"Risk Score: {result['risk_score']:.3f}")
         print(f"Action: {result['action']}")
         if result['risk_factors']:

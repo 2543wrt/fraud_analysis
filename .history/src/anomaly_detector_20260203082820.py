@@ -2,8 +2,6 @@ import pandas as pd
 from sklearn.ensemble import IsolationForest, RandomForestClassifier
 from sklearn.preprocessing import StandardScaler
 from sklearn.model_selection import train_test_split
-import joblib
-import os
 
 class AnomalyDetector:
     """Multi-model anomaly detection system"""
@@ -139,9 +137,3 @@ class AnomalyDetector:
         print(self.df_features['risk_category'].value_counts().sort_index())
         
         return self.df_features
-
-    def save_model(self, filepath):
-        """Save the entire detector state to a file"""
-        print(f"\nSaving model state to {filepath}...")
-        joblib.dump(self, filepath)
-        print("  ✓ Model saved successfully")
