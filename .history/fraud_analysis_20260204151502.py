@@ -69,9 +69,8 @@ def main():
             neo = Neo4jConnector(args.neo4j_uri, args.neo4j_user, args.neo4j_pass)
             neo.clear_database()
             neo.load_transactions(df_transactions)
-            count = neo.get_node_count()
             neo.close()
-            print(f"✓ Data successfully uploaded to Neo4j ({count} nodes created)")
+            print("✓ Data successfully uploaded to Neo4j")
         except Exception as e:
             print(f"⚠ Neo4j Error: {e}")
     

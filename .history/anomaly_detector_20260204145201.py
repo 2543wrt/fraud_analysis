@@ -104,6 +104,7 @@ class AnomalyDetector:
         
         return model, feature_importance
     
+    def compute_risk_score(self):
     def compute_risk_score(self, w_if=0.4, w_rf=0.6):
         """Combine multiple signals into unified risk score"""
         print("\nComputing unified risk scores...")
@@ -119,6 +120,7 @@ class AnomalyDetector:
         else:
             rf_norm = 0
         
+        risk_score = 0.4 * if_norm + 0.6 * rf_norm
         risk_score = w_if * if_norm + w_rf * rf_norm
         
         self.df_features['risk_score'] = risk_score

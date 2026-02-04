@@ -6,18 +6,13 @@ import seaborn as sns
 import warnings
 import logging
 import os
-import sys
 import argparse
 import pandas as pd
-
-# Add 'src' directory to the system path so Python can find the modules
-sys.path.append(os.path.join(os.path.dirname(__file__), 'src'))
 
 from data_generator import TransactionGenerator
 from transaction_graph import TransactionGraph
 from feature_extractor import GraphFeatureExtractor
 from anomaly_detector import AnomalyDetector
-from neo4j_connector import Neo4jConnector
 from real_time_scorer import RealTimeScorer
 from visualization import create_visualizations
 from reporting import generate_report
@@ -46,9 +41,6 @@ def main():
     """Main execution function"""
     parser = argparse.ArgumentParser(description='Money Laundering Detection System')
     parser.add_argument('--data', type=str, help='Path to input transaction CSV (Production Mode)', default=None)
-    parser.add_argument('--neo4j-uri', type=str, default="bolt://localhost:7687", help='Neo4j URI')
-    parser.add_argument('--neo4j-user', type=str, default="neo4j", help='Neo4j User')
-    parser.add_argument('--neo4j-pass', type=str, default=None, help='Neo4j Password')
     args = parser.parse_args()
     
     # 1. Generate data
@@ -62,20 +54,7 @@ def main():
     graph = TransactionGraph()
     graph.build_from_transactions(df_transactions)
     
-    # 3. Upload to Neo4j (if password provided)
-    if args.neo4j_pass:
-        try:
-            print(f"\nConnecting to Neo4j at {args.neo4j_uri}...")
-            neo = Neo4jConnector(args.neo4j_uri, args.neo4j_user, args.neo4j_pass)
-            neo.clear_database()
-            neo.load_transactions(df_transactions)
-            count = neo.get_node_count()
-            neo.close()
-            print(f"✓ Data successfully uploaded to Neo4j ({count} nodes created)")
-        except Exception as e:
-            print(f"⚠ Neo4j Error: {e}")
-    
-    # 4. Detect patterns
+    # 3. Detect patterns
     cycles = graph.detect_cycles()
     suspicious_groups = graph.find_shared_infrastructure()
     
@@ -116,7 +95,7 @@ def main():
         
         label_display = tx.get('label', 'UNKNOWN').upper()
         print(f"\nTest Case {i}: {label_display}")
-        print(f"Transaction: {tx['from_account']} → {tx['to_account']} (R{tx['amount']:.2f})")
+        print(f"Transaction: {tx['from_account']} → {tx['to_account']} (${tx['amount']:.2f})")
         print(f"Risk Score: {result['risk_score']:.3f}")
         print(f"Action: {result['action']}")
         if result['risk_factors']:

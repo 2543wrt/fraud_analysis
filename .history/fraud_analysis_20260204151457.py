@@ -69,9 +69,8 @@ def main():
             neo = Neo4jConnector(args.neo4j_uri, args.neo4j_user, args.neo4j_pass)
             neo.clear_database()
             neo.load_transactions(df_transactions)
-            count = neo.get_node_count()
             neo.close()
-            print(f"✓ Data successfully uploaded to Neo4j ({count} nodes created)")
+            print("✓ Data successfully uploaded to Neo4j")
         except Exception as e:
             print(f"⚠ Neo4j Error: {e}")
     
@@ -116,6 +115,7 @@ def main():
         
         label_display = tx.get('label', 'UNKNOWN').upper()
         print(f"\nTest Case {i}: {label_display}")
+        print(f"Transaction: {tx['from_account']} → {tx['to_account']} (${tx['amount']:.2f})")
         print(f"Transaction: {tx['from_account']} → {tx['to_account']} (R{tx['amount']:.2f})")
         print(f"Risk Score: {result['risk_score']:.3f}")
         print(f"Action: {result['action']}")

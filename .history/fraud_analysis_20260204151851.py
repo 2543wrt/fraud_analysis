@@ -71,6 +71,7 @@ def main():
             neo.load_transactions(df_transactions)
             count = neo.get_node_count()
             neo.close()
+            print("✓ Data successfully uploaded to Neo4j")
             print(f"✓ Data successfully uploaded to Neo4j ({count} nodes created)")
         except Exception as e:
             print(f"⚠ Neo4j Error: {e}")
