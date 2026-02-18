@@ -14,6 +14,8 @@ The system generates synthetic transaction data containing both legitimate trans
 4.  **Anomaly Detection**: Uses two machine learning models:
     - **Isolation Forest**: Finds statistical outliers (transactions that look very different from normal).
     - **Random Forest**: A supervised model trained to recognize specific fraud patterns.
+      - **Hyperparameter Tuning**: Utilizes `GridSearchCV` to optimize model parameters for better performance.
+      - **Cross-Validation**: Implements `StratifiedKFold` to ensure the model generalizes well across different data subsets.
 5.  **Risk Scoring**: Combines the results to give every account and transaction a risk score.
 
 ## Project Structure

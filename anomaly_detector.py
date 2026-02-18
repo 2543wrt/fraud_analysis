@@ -1,7 +1,7 @@
 import pandas as pd
 from sklearn.ensemble import IsolationForest, RandomForestClassifier
 from sklearn.preprocessing import StandardScaler
-from sklearn.model_selection import train_test_split
+from sklearn.model_selection import train_test_split, GridSearchCV, StratifiedKFold
 import joblib
 import os
 
@@ -62,23 +62,44 @@ class AnomalyDetector:
         return self.df_features['true_label'].values
     
     def train_supervised_model(self):
-        """Train supervised model using labeled data"""
-        print("\nTraining supervised Random Forest...")
+        """Train supervised model using labeled data with hyperparameter tuning"""
+        print("\nTraining supervised Random Forest with GridSearchCV...")
         
         y = self.create_ground_truth_labels()
+        
+        # Use StratifiedKFold for cross-validation to maintain class distribution
+        cv = StratifiedKFold(n_splits=5, shuffle=True, random_state=42)
         
         X_train, X_test, y_train, y_test = train_test_split(
             self.X_scaled, y, test_size=0.3, random_state=42, stratify=y
         )
         
-        model = RandomForestClassifier(
-            n_estimators=100,
-            max_depth=10,
-            random_state=42,
-            class_weight='balanced'
+        # Define hyperparameter grid
+        param_grid = {
+            'n_estimators': [50, 100, 200],
+            'max_depth': [5, 10, 15, None],
+            'min_samples_split': [2, 5, 10],
+            'class_weight': ['balanced', 'balanced_subsample']
+        }
+        
+        rf = RandomForestClassifier(random_state=42)
+        
+        grid_search = GridSearchCV(
+            estimator=rf,
+            param_grid=param_grid,
+            cv=cv,
+            scoring='f1_weighted',
+            n_jobs=-1,
+            verbose=1
         )
         
-        model.fit(X_train, y_train)
+        print("  Tuning hyperparameters...")
+        grid_search.fit(X_train, y_train)
+        
+        print(f"  ✓ Best parameters found: {grid_search.best_params_}")
+        print(f"  ✓ Best CV score: {grid_search.best_score_:.3f}")
+        
+        model = grid_search.best_estimator_
         
         train_score = model.score(X_train, y_train)
         test_score = model.score(X_test, y_test)
